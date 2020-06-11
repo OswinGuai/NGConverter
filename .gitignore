@@ -6,3 +6,4 @@ trained_models/
 tflite_model/
 inference_graph/
 tensorflow_toco/
+demo_task
