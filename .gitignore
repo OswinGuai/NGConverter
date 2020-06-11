@@ -5,5 +5,4 @@ __pycache__/
 trained_models/
 tflite_model/
 inference_graph/
-tensorflow_toco/
 *.log
