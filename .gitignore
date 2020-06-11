@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.idea/
+.DS_STORE
+trained_models/
+tflite_model/
+inference_graph/
+tensorflow_toco/
