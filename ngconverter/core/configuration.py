@@ -4,6 +4,9 @@ class ConfigInfo:
 
     EMBEDDED_MODEL = "embedded_model"
     EMBEDDED_DATA = "embedded_data"
+    EMBEDDED_LABEL = "embedded_label"
+
+    DEFAULT_TRAINSTEPS = 1000
 
     def __init__(self, yaml_config):
 
@@ -12,7 +15,9 @@ class ConfigInfo:
         self.PRETRAINED_MODEL = ConfigInfo.EMBEDDED_MODEL
         self.TRAIN_DATASET = ConfigInfo.EMBEDDED_DATA
         self.EVAL_DATASET = ConfigInfo.EMBEDDED_DATA
+        self.LABELSET = ConfigInfo.EMBEDDED_LABEL
         self.TARGET_PLATFORM = ConfigInfo.PlatformType.UNDEFINED
+        self.TRAIN_STEPS = ConfigInfo.DEFAULT_TRAINSTEPS
 
         base_memberset = set(self.__dict__.keys())
 

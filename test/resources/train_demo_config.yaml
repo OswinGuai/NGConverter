@@ -19,12 +19,15 @@ pretrained_model: embedded_model
 # train_dataset candidates:
 #     (1) embedded_data.
 #     (2) an address for custom dataset. TODO Requirements should be listed.
-train_dataset: embedded_data
+train_dataset: test/resources/train.record
 
 # eval_dataset candidates:
 #     (1) embedded_data.
 #     (2) an address for custom dataset. TODO Requirements should be listed.
-eval_dataset: embedded_data
+eval_dataset: test/resources/val.record
+
+# label set for train/eval dataset. TODO Requirements should be listed.
+labelset: test/resources/ty.pbtxt
 
 # target_platform candidates:
 #     (1) android.
