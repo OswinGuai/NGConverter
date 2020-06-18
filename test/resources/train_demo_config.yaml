@@ -2,9 +2,9 @@
 # 作者：peizhyi@gmail.com
 # 日期：20200612 16:25
 
-# task_type candidates:
+# job type candidates:
 #     (1) finetune_and_convert. Fine-tune a model and convert it into a mobile-supported one.
-task_type: finetune_and_convert
+job: finetune_and_convert
 
 # function candidates:
 #     (1) object_detection.
@@ -36,4 +36,4 @@ target_platform: android
 
 # train parameters
 train_parameters:
-  steps: 100
+  steps: 20

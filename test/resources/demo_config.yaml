@@ -2,9 +2,9 @@
 # 作者：peizhyi@gmail.com
 # 日期：20200612 16:25
 
-# task_type candidates:
+# job type candidates:
 #     (1) finetune_and_convert. Fine-tune a model and convert it into a mobile-supported one.
-task_type: finetune_and_convert
+job: finetune_and_convert
 
 # function candidates:
 #     (1) object_detection.
@@ -25,6 +25,9 @@ train_dataset: embedded_data
 #     (1) embedded_data.
 #     (2) an address for custom dataset. TODO Requirements should be listed.
 eval_dataset: embedded_data
+
+# label set for train/eval dataset. TODO Requirements should be listed.
+labelset: test/resources/ty.pbtxt
 
 # target_platform candidates:
 #     (1) android.

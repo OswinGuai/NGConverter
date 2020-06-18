@@ -10,7 +10,7 @@ class ConfigInfo:
 
     def __init__(self, yaml_config):
 
-        self.TASK_TYPE = ConfigInfo.TaskType.UNDEFINED
+        self.JOB = ConfigInfo.JobType.UNDEFINED
         self.FUNCTION = ConfigInfo.FunctionType.UNDEFINED
         self.PRETRAINED_MODEL = ConfigInfo.EMBEDDED_MODEL
         self.TRAIN_DATASET = ConfigInfo.EMBEDDED_DATA
@@ -19,17 +19,21 @@ class ConfigInfo:
         self.TARGET_PLATFORM = ConfigInfo.PlatformType.UNDEFINED
         self.TRAIN_STEPS = ConfigInfo.DEFAULT_TRAINSTEPS
 
-        base_memberset = set(self.__dict__.keys())
+        user_config = _uppercase_for_dict_keys(yaml_config)
 
-        user_config = yaml_config
-        user_config = _uppercase_for_dict_keys(user_config)
-        self.__dict__.update(user_config)
+        self.JOB = ConfigInfo.JobType(user_config['JOB'])
+        self.FUNCTION = ConfigInfo.FunctionType(user_config['FUNCTION'])
+        self.TARGET_PLATFORM = ConfigInfo.PlatformType(user_config['TARGET_PLATFORM'])
 
-        updated_memberset = set(self.__dict__.keys())
-        assert base_memberset == updated_memberset
+        print(user_config)
+        self.PRETRAINED_MODEL = user_config['PRETRAINED_MODEL']
+        self.TRAIN_DATASET = user_config['TRAIN_DATASET']
+        self.EVAL_DATASET = user_config['EVAL_DATASET']
+        self.LABELSET = user_config['LABELSET']
+        self.TRAIN_STEPS = user_config['TRAIN_PARAMETERS']['STEPS']
 
 
-    class TaskType(Enum):
+    class JobType(Enum):
         UNDEFINED = "undefined"
         FINETUNE_AND_CONVERT = "finetune_and_convert"
 
@@ -47,6 +51,8 @@ class ConfigInfo:
 def _uppercase_for_dict_keys(lower_dict):
     upper_dict = {}
     for k, v in lower_dict.items():
+        if isinstance(v, str):
+            upper_dict[k.upper()] = v.strip()
         if isinstance(v, dict):
             v = _uppercase_for_dict_keys(v)
         upper_dict[k.upper()] = v

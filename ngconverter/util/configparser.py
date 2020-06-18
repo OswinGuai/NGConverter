@@ -37,9 +37,11 @@ def instance_embedded_model_config(embedded_model_config, target_dir, train_data
         """.format(**update_config)
     ]
     pipeline_config_path = os.path.join(target_dir, "pipeline.config")
-    os.remove(pipeline_config_path)
+    if os.path.exists(pipeline_config_path):
+        os.remove(pipeline_config_path)
 
     configs = config_util.get_configs_from_pipeline_file(embedded_model_config, config_override=input_config_list)
     pipeline_proto = config_util.create_pipeline_proto_from_configs(configs)
     config_util.save_pipeline_config(pipeline_proto, target_dir)
     return pipeline_config_path
+

@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:30a0a59f2b34eb9704fcee33545ad31c7850f20f048e4264f509d09ab3e8cc96
-size 68
+item {
+  id: 1
+  name: 'bucket'
+}
+
+item {
+  id: 2
+  name: 'Truck'
+}
