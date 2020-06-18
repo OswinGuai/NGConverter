@@ -11,9 +11,7 @@ import shutil
 class TestTask(unittest.TestCase):
 
     def tearDown(self):
-        print("-----try to remove task.")
         shutil.rmtree(self.task_name)
-        print("-----remove task finish.")
 
     def test_build_from_config(self):
         self.task_name = "finetune_convert_ssd_demotask"
@@ -21,9 +19,7 @@ class TestTask(unittest.TestCase):
         config = load_config(config_path)
         task = Task.Builder.init_by_config(self.task_name, config)
         task.execute()
-        print("-----waiting task.")
         task.hold()
-        print("-----task finish.")
 
         self.assertEqual('foo'.upper(), 'FOO')
 

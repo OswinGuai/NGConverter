@@ -36,8 +36,6 @@ class Task:
             target_process = None
 
             def finetune_and_convert_process(self):
-                print("finetune_and_convert_process:")
-                print(os.environ["CUDA_VISIBLE_DEVICES"])
                 finetuner = FineTuneAPI()
                 converter = ConvertAPI()
                 if (task_func == ConfigInfo.FunctionType.OBJECT_DETECTION):
@@ -58,7 +56,6 @@ class Task:
                 elif (task_func == ConfigInfo.FunctionType.IMAGE_CLASSIFICATION):
                     pass
 
-            print(task.__dict__)
             if (job == ConfigInfo.JobType.FINETUNE_AND_CONVERT):
                 target_process = finetune_and_convert_process
             else:
@@ -123,11 +120,6 @@ class Task:
                 #TODO check memory usage currently and choose a free one.
                 assert r.required_num > 0
                 os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, range(r.required_num)))
-                print("TF_GPU env in prepare:")
-                print(os.environ["CUDA_VISIBLE_DEVICES"])
-                print(','.join(map(str, range(r.required_num))))
-            print("env in prepare:")
-            print(os.environ["CUDA_VISIBLE_DEVICES"])
 
     def _process(self):
         '''
@@ -138,12 +130,8 @@ class Task:
 
     def execute(self):
         self.prepare_resource()
-        print("env after prepare:")
-        print(os.environ["CUDA_VISIBLE_DEVICES"])
-        #p = Process(target=self._process, args=())
         self.p = Process(target=self._process)
         self.p.start()
-        #p.join()
 
     def hold(self):
         if self.p != None:

@@ -25,7 +25,6 @@ class ConfigInfo:
         self.FUNCTION = ConfigInfo.FunctionType(user_config['FUNCTION'])
         self.TARGET_PLATFORM = ConfigInfo.PlatformType(user_config['TARGET_PLATFORM'])
 
-        print(user_config)
         self.PRETRAINED_MODEL = user_config['PRETRAINED_MODEL']
         self.TRAIN_DATASET = user_config['TRAIN_DATASET']
         self.EVAL_DATASET = user_config['EVAL_DATASET']
