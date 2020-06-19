@@ -36,4 +36,4 @@ target_platform: android
 
 # train parameters
 train_parameters:
-  steps: 20
+  steps: 2

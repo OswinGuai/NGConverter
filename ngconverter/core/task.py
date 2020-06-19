@@ -6,7 +6,6 @@ from multiprocessing import Process
 
 from ngconverter.record.exception import REPULICATE_TASK_NAME
 from ngconverter.record.log import TaskLogger
-from ngconverter.record.message import TaskMessage
 from ngconverter.util.filesystem import remakedirs
 from ngconverter.util.configparser import instance_embedded_model_config
 from ngconverter.core.configuration import ConfigInfo
@@ -54,17 +53,17 @@ class Task:
                                                                               eval_dataset_path,
                                                                               label_path)
                         self.status = TaskStatus.FINETUNING
-                        task_logger.log(self, "Begin to fine-tune model by config file %s." % pipeline_config_path)
+                        task_logger.info(self, "Begin to fine-tune model by config file %s." % pipeline_config_path)
                         model_path = finetuner.finetune_embedded_objectdetection_model(pipeline_config_path, self.train_dir,
                                                                        train_steps=train_steps)
                         self.status = TaskStatus.FINETUNE_DONE
-                        task_logger.log(self, "Finish fine-tuning.")
+                        task_logger.info(self, "Finish fine-tuning.")
 
                         self.status = TaskStatus.CONVERTING
-                        task_logger.log(self, "Begin to convert model at %s by config file %s." % (model_path, pipeline_config_path))
+                        task_logger.info(self, "Begin to convert model at %s by config file %s." % (model_path, pipeline_config_path))
                         converter.convert_objectdetection_tf1(pipeline_config_path, model_path, self.task_dir)
                         self.status = TaskStatus.CONVERT_DONE
-                        task_logger.log(self, "Finish converting.")
+                        task_logger.info(self, "Finish converting.")
                     else:
                         raise NotImplementedError
 
@@ -86,20 +85,19 @@ class Task:
         self.status = TaskStatus.INITING
         self.task_dir = os.path.join(parent_dir, task_name)
         self.task_name = task_name
-        self._logger = TaskLogger.Factory.getTaskLogger(self, level)
-
         # Check directory empty
         # Or, reload the task with reloading option
         if os.path.exists(self.task_dir):
             if not reloading:
                 self.status = TaskStatus.INIT_FAILED
-                self._logger.error(self, TaskMessage.fill_in_template(TaskMessage.Template.error_create_duplicate_task, self))
+                logging.error("Try to create the task at %s again, but reject." % self.task_dir)
                 raise REPULICATE_TASK_NAME
             else:
                 # TODO reload task.
                 raise NotImplementedError
         # Build directories
         remakedirs(self.task_dir)
+        self._logger = TaskLogger.getTaskLogger(self, level)
         self.train_dir = os.path.join(self.task_dir, "trained_model")
 
         self.status = TaskStatus.INITED
