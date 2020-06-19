@@ -1,5 +1,6 @@
 from embedded_model.object_detection import model_lib
 import tensorflow as tf
+import os
 
 class FineTuneAPI:
 
@@ -34,6 +35,8 @@ class FineTuneAPI:
             eval_on_train_data=False)
         # Currently only a single Eval Spec is allowed.
         tf.estimator.train_and_evaluate(estimator, train_spec, eval_specs[0])
+        model_path = os.path.join(target_dir, "model.ckpt-%d" % train_steps)
+        return model_path
 
     def _create_hparams(self, hparams_overrides=None):
         """Returns hyperparameters, including any flag value overrides.

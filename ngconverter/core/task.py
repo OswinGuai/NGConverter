@@ -1,9 +1,12 @@
 import os
-from enum import Enum
+import logging
+from logging import Logger
 from types import MethodType
 from multiprocessing import Process
 
-from ngconverter.core.exception import *
+from ngconverter.record.exception import REPULICATE_TASK_NAME
+from ngconverter.record.log import TaskLogger
+from ngconverter.record.message import TaskMessage
 from ngconverter.util.filesystem import remakedirs
 from ngconverter.util.configparser import instance_embedded_model_config
 from ngconverter.core.configuration import ConfigInfo
@@ -12,16 +15,22 @@ from ngconverter.core.finetune import FineTuneAPI
 from ngconverter.core.convert import ConvertAPI
 from ngconverter.core.environment import Resource
 
-
+'''
+    Task Management.
+    author          - peizhyi@gmail.com
+    last modified   - 20200619 16:58
+'''
 class Task:
     class Builder:
         @staticmethod
         def load_from_dir(task_dir):
             task = Task(task_dir, reloading=True)
+            return task
 
         @staticmethod
         def init_by_config(task_name, config):
             task = Task(task_name, reloading=False)
+            task_logger = task.get_tasklogger()
             assert isinstance(config, ConfigInfo)
             job = config.JOB
             task_func = config.FUNCTION
@@ -30,31 +39,39 @@ class Task:
             eval_dataset_path = config.EVAL_DATASET
             label_path = config.LABELSET
             train_steps = config.TRAIN_STEPS
-            target_dir = task_name
-            train_dir = os.path.join(target_dir, "trained_model")
-            model_path = os.path.join(train_dir, "model.ckpt-%d" % train_steps)
             target_process = None
 
             def finetune_and_convert_process(self):
+                assert isinstance(self, Task)
                 finetuner = FineTuneAPI()
                 converter = ConvertAPI()
+                task_logger = self.get_tasklogger()
                 if (task_func == ConfigInfo.FunctionType.OBJECT_DETECTION):
                     if (task_pretrained == ConfigInfo.EMBEDDED_MODEL):
-                        
                         pipeline_config_path = instance_embedded_model_config(EMBEDDED_SSD_PIPELINE_CONFIG_PATH,
-                                                                              task_name,
+                                                                              self.task_dir,
                                                                               train_dataset_path,
                                                                               eval_dataset_path,
                                                                               label_path)
-                        finetuner.finetune_embedded_objectdetection_model(pipeline_config_path, train_dir,
+                        self.status = TaskStatus.FINETUNING
+                        task_logger.log(self, "Begin to fine-tune model by config file %s." % pipeline_config_path)
+                        model_path = finetuner.finetune_embedded_objectdetection_model(pipeline_config_path, self.train_dir,
                                                                        train_steps=train_steps)
-                        converter.convert_objectdetection_tf1(pipeline_config_path, model_path, target_dir)
+                        self.status = TaskStatus.FINETUNE_DONE
+                        task_logger.log(self, "Finish fine-tuning.")
 
+                        self.status = TaskStatus.CONVERTING
+                        task_logger.log(self, "Begin to convert model at %s by config file %s." % (model_path, pipeline_config_path))
+                        converter.convert_objectdetection_tf1(pipeline_config_path, model_path, self.task_dir)
+                        self.status = TaskStatus.CONVERT_DONE
+                        task_logger.log(self, "Finish converting.")
                     else:
                         raise NotImplementedError
 
                 elif (task_func == ConfigInfo.FunctionType.IMAGE_CLASSIFICATION):
-                    pass
+                    raise NotImplementedError
+                else:
+                    raise NotImplementedError
 
             if (job == ConfigInfo.JobType.FINETUNE_AND_CONVERT):
                 target_process = finetune_and_convert_process
@@ -65,50 +82,27 @@ class Task:
             task._process = MethodType(target_process, task)
             return task
 
+    def __init__(self, task_name, parent_dir='.', reloading=True, process=None, level=logging.INFO):
+        self.status = TaskStatus.INITING
+        self.task_dir = os.path.join(parent_dir, task_name)
+        self.task_name = task_name
+        self._logger = TaskLogger.Factory.getTaskLogger(self, level)
 
-    class Status(Enum):
-        '''
-        Status describing task.
-        '''
-
-        # Initialization
-        INITING = 0
-        INITED = 1
-        INIT_FAILED = 2
-
-        # Execution
-        RESOURCE_PREPARING = 100
-
-        FINETUNING = 110
-        FINETUNE_DONE = 111
-        FINETUNE_FAILED = 112
-
-        CONVERTING = 120
-        CONVERT_DONE = 121
-        CONVERT_FAILED = 122
-
-        CLEANING_TEMP_FILES = 130
-
-        EXECUTION_DONE = 199
-
-        # Response
-        RESPONDING = 200
-        RESPOND_DONE = 201
-        RESPOND_FAILED = 202
-
-    def __init__(self, task_name, reloading=True, process=None):
-        self.task_dir = task_name
         # Check directory empty
         # Or, reload the task with reloading option
         if os.path.exists(self.task_dir):
             if not reloading:
-                self.status = Task.Status.INIT_FAILED
+                self.status = TaskStatus.INIT_FAILED
+                self._logger.error(self, TaskMessage.fill_in_template(TaskMessage.Template.error_create_duplicate_task, self))
                 raise REPULICATE_TASK_NAME
             else:
                 # TODO reload task.
-                pass
-        self.status = Task.Status.INITED
+                raise NotImplementedError
+        # Build directories
         remakedirs(self.task_dir)
+        self.train_dir = os.path.join(self.task_dir, "trained_model")
+
+        self.status = TaskStatus.INITED
         self.resource_list = []
         self._process = process
 
@@ -137,3 +131,5 @@ class Task:
         if self.p != None:
             self.p.join()
 
+    def get_tasklogger(self) -> TaskLogger:
+        return self._logger
