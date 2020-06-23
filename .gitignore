@@ -6,4 +6,6 @@ trained_models/
 tflite_model/
 inference_graph/
 *.log
+*.out
 demo_task/
+finetune_convert_ssd_demotask/

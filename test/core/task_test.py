@@ -11,7 +11,8 @@ import shutil
 class TestTask(unittest.TestCase):
 
     def tearDown(self):
-        shutil.rmtree(self.task_name)
+        # shutil.rmtree(self.task_name)
+        pass
 
     def test_build_from_config(self):
         self.task_name = "finetune_convert_ssd_demotask"

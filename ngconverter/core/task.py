@@ -111,7 +111,8 @@ class Task:
             if r.resource_type == Resource.ResourceType.TF_GPU:
                 #TODO check memory usage currently and choose a free one.
                 assert r.required_num > 0
-                os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, range(r.required_num)))
+                #os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, range(r.required_num)))
+                os.environ["CUDA_VISIBLE_DEVICES"] = '4'
 
     def _process(self):
         '''

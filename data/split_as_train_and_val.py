@@ -2,7 +2,7 @@ import tensorflow as tf
 import os
 import random
 import shutil
-from object_detection.utils import dataset_util
+from embedded_model.object_detection.utils import dataset_util
 from PIL import Image
 
 flags = tf.app.flags
