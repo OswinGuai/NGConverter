@@ -1,4 +1,8 @@
 from embedded_model.object_detection import model_lib
+from embedded_model.tensorflow_examples.lite.model_maker.core.data_util.image_dataloader import ImageClassifierDataLoader
+from embedded_model.tensorflow_examples.lite.model_maker.core.task import image_classifier
+from embedded_model.tensorflow_examples.lite.model_maker.core.task import model_spec
+
 import tensorflow as tf
 import os
 
@@ -6,6 +10,20 @@ class FineTuneAPI:
 
     _EMBEDDED_MODEL_CHECKPOINT = "~/.nglite/pretrained"
     _EMBEDDED_OBJECTDETECTION_NAME = "ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03"
+
+    def get_tfhub_imageclassification_model(self, train_dataset, model_name='efficientnet_lite0', train_epochs=10, batch_size=64):
+        """Runs demo."""
+        spec = model_spec.get(model_name)
+        data = ImageClassifierDataLoader.from_folder(train_dataset)
+        train_data, validation_data = data.split(0.9)
+
+        model = image_classifier.create(
+            train_data,
+            model_spec=spec,
+            validation_data=validation_data,
+            batch_size=batch_size,
+            epochs=train_epochs)
+        return model
 
     def finetune_embedded_objectdetection_model(self, pipeline_config_path, target_dir, train_steps=20000):
 

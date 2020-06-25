@@ -10,7 +10,7 @@ def load_config(file_path):
     config_info = ConfigInfo(yaml_config)
     return config_info
 
-def instance_embedded_model_config(embedded_model_config, target_dir, train_dataset_path, eval_dataset_path, label_path):
+def instance_tf_objectdetection_model_config(embedded_model_config, target_dir, train_dataset_path, eval_dataset_path, label_path):
     update_config = {
         "train_dataset_path": train_dataset_path,
         "eval_dataset_path": eval_dataset_path,

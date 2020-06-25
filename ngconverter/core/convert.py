@@ -19,6 +19,9 @@ class ConvertAPI:
         tflite_model = converter.convert()
         raise NotImplementedError("support from TF2 is still missing.")
 
+    def convert_imageclassification_tfhub_model(self, tfhub_model, target_dir):
+        tfhub_model.export(target_dir)
+
     def convert_objectdetection_tf1(self, pipeline_config_path, model_path, target_dir):
         inference_graph_path = os.path.join(target_dir, "inference_graph")
         filesystem.remakedirs(inference_graph_path)

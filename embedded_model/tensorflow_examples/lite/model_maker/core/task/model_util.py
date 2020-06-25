@@ -74,19 +74,23 @@ def export_tflite(model,
 
   convert_from_saved_model = (
       compat.get_tf_behavior() == 1 or convert_from_saved_model_tf2)
-  with _create_temp_dir(convert_from_saved_model) as temp_dir_name:
-    if temp_dir_name:
+  with _create_temp_dir(True) as temp_dir_name:
+    if convert_from_saved_model:
       save_path = os.path.join(temp_dir_name, 'saved_model')
       model.save(save_path, include_optimizer=False, save_format='tf')
       converter = lite.TFLiteConverter.from_saved_model(save_path)
     else:
-      converter = lite.TFLiteConverter.from_keras_model(model)
+      # TODO modified by peizhyi@gmail.com
+      save_path = os.path.join(temp_dir_name, 'keras_model.h5')
+      tf.keras.experimental.export_saved_model(model, save_path)
+      converter = lite.TFLiteConverter.from_saved_model(save_path)
 
     if quantization_config:
       converter = quantization_config.get_converter_with_quantization(
           converter, gen_dataset_fn)
 
-    tflite_model = converter.convert()
+  tflite_model = converter.convert()
 
   with tf.io.gfile.GFile(tflite_filepath, 'wb') as f:
     f.write(tflite_model)
+

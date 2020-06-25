@@ -7,7 +7,7 @@ from multiprocessing import Process
 from ngconverter.record.exception import REPULICATE_TASK_NAME
 from ngconverter.record.log import TaskLogger
 from ngconverter.util.filesystem import remakedirs
-from ngconverter.util.configparser import instance_embedded_model_config
+from ngconverter.util.configparser import instance_tf_objectdetection_model_config
 from ngconverter.core.configuration import ConfigInfo
 from ngconverter.core.constants import *
 from ngconverter.core.finetune import FineTuneAPI
@@ -47,11 +47,11 @@ class Task:
                 task_logger = self.get_tasklogger()
                 if (task_func == ConfigInfo.FunctionType.OBJECT_DETECTION):
                     if (task_pretrained == ConfigInfo.EMBEDDED_MODEL):
-                        pipeline_config_path = instance_embedded_model_config(EMBEDDED_SSD_PIPELINE_CONFIG_PATH,
-                                                                              self.task_dir,
-                                                                              train_dataset_path,
-                                                                              eval_dataset_path,
-                                                                              label_path)
+                        pipeline_config_path = instance_tf_objectdetection_model_config(EMBEDDED_SSD_PIPELINE_CONFIG_PATH,
+                                                                                        self.task_dir,
+                                                                                        train_dataset_path,
+                                                                                        eval_dataset_path,
+                                                                                        label_path)
                         self.status = TaskStatus.FINETUNING
                         task_logger.info(self, "Begin to fine-tune model by config file %s." % pipeline_config_path)
                         model_path = finetuner.finetune_embedded_objectdetection_model(pipeline_config_path, self.train_dir,
@@ -68,7 +68,20 @@ class Task:
                         raise NotImplementedError
 
                 elif (task_func == ConfigInfo.FunctionType.IMAGE_CLASSIFICATION):
-                    raise NotImplementedError
+                    if (task_pretrained == ConfigInfo.EMBEDDED_MODEL):
+                        self.status = TaskStatus.FINETUNING
+                        task_logger.info(self, "Begin to fine-tune model('efficientnet_lite0') with tfhub. ")
+                        tfhub_model = finetuner.get_tfhub_imageclassification_model(train_dataset_path, train_epochs=train_steps)
+                        self.status = TaskStatus.FINETUNE_DONE
+                        task_logger.info(self, "Finish fine-tuning.")
+
+                        self.status = TaskStatus.CONVERTING
+                        task_logger.info(self, "Begin to convert model('efficientnet_lite0') with tfhub.")
+                        converter.convert_imageclassification_tfhub_model(tfhub_model, self.task_dir)
+                        self.status = TaskStatus.CONVERT_DONE
+                        task_logger.info(self, "Finish converting.")
+                    else:
+                        raise NotImplementedError
                 else:
                     raise NotImplementedError
 

@@ -16,7 +16,7 @@ class TestTianyuanProcess(unittest.TestCase):
     finetuner = FineTuneAPI()
     converter = ConvertAPI()
 
-    def test_wholeprocess(self):
+    def test_objectdetection_wholeprocess(self):
         ori_pipeline_config_path = "embedded_model/ssd_pipeline.config"
         target_dir = "test/resources/demo_task"
 

@@ -1,0 +1,31 @@
+# 本文件是NGConverter的样例配置文件
+# 作者：peizhyi@gmail.com
+# 日期：20200626 01:25
+
+# job type candidates:
+#     (1) finetune_and_convert. Fine-tune a model and convert it into a mobile-supported one.
+job: finetune_and_convert
+
+# function candidates:
+#     (1) object_detection.
+#     (2) image_classification.
+function: image_classification
+
+# pretrained_model candidates:
+#     (1) embedded_model.
+#     (2) an address for custom model. TODO Requirements should be listed.
+pretrained_model: embedded_model
+
+# train_dataset candidates:
+#     (1) embedded_data.
+#     (2) an address for custom dataset. TODO Requirements should be listed.
+train_dataset: test/resources/classification_demo_dataset
+
+# target_platform candidates:
+#     (1) android.
+#     (2) ios.
+target_platform: android
+
+# train parameters
+train_parameters:
+  steps: 2
