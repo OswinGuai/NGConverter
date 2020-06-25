@@ -21,7 +21,6 @@ import os
 import random
 
 import tensorflow as tf
-import tensorflow_datasets as tfds
 from tensorflow_examples.lite.model_maker.core.data_util import dataloader
 
 
@@ -43,21 +42,6 @@ def create_data(name, data, info, num_classes, label_names):
   data = data.map(lambda a: (a['image'], a['label']))
   size = info.splits[name].num_examples
   return ImageClassifierDataLoader(data, size, num_classes, label_names)
-
-
-def load_from_tfds(name):
-  """Loads data from tensorflow_datasets."""
-  data, info = tfds.load(name, with_info=True)
-  if 'label' not in info.features:
-    raise ValueError('info.features need to contain \'label\' key.')
-  num_classes = info.features['label'].num_classes
-  label_names = info.features['label'].names
-
-  train_data = create_data('train', data, info, num_classes, label_names)
-  validation_data = create_data('validation', data, info, num_classes,
-                                label_names)
-  test_data = create_data('test', data, info, num_classes, label_names)
-  return train_data, validation_data, test_data
 
 
 class ImageClassifierDataLoader(dataloader.DataLoader):
