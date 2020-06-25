@@ -94,7 +94,7 @@ class Task:
             task._process = MethodType(target_process, task)
             return task
 
-    def __init__(self, task_name, parent_dir='.', reloading=True, process=None, level=logging.INFO):
+    def __init__(self, task_name, parent_dir='.', reloading=True, process=None):
         self.status = TaskStatus.INITING
         self.task_dir = os.path.join(parent_dir, task_name)
         self.task_name = task_name
@@ -110,12 +110,23 @@ class Task:
                 raise NotImplementedError
         # Build directories
         remakedirs(self.task_dir)
-        self._logger = TaskLogger.getTaskLogger(self, level)
         self.train_dir = os.path.join(self.task_dir, "trained_model")
 
         self.status = TaskStatus.INITED
         self.resource_list = []
         self._process = process
+
+    def get_task_logger(self, level=logging.INFO):
+        if self._logger:
+            return self._logger
+        task_logger = logging.getLogger(self.task_name)
+        handler = logging.FileHandler(os.path.join(self.task_dir, 'task.log'))
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(task_status)s - %(message)s')
+        handler.setFormatter(formatter)
+        task_logger.addHandler(handler)
+        task_logger.setLevel(level)
+        self._logger = TaskLogger(self, task_logger)
+        return self._logger
 
     def prepare_resource(self):
         # Prepare GPU for training.

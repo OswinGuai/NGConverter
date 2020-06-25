@@ -6,21 +6,21 @@ from logging import Logger
 
 
 class TaskLogger:
-    def __init__(self, logger):
-        assert isinstance(logger, Logger)
+    def __init__(self, task, logger: Logger):
         self._logger = logger
+        self._task = task
 
-    def info(self, task, msg, *args, **kwargs):
-        self._logger.info(msg, extra={"task_status": task.status}, *args, **kwargs)
+    def info(self, msg, *args, **kwargs):
+        self._logger.info(msg, extra={"task_status": self._task.status}, *args, **kwargs)
 
-    def warn(self, task, msg, *args, **kwargs):
-        self._logger.warn(msg, extra={"task_status": task.status}, *args, **kwargs)
+    def warn(self, msg, *args, **kwargs):
+        self._logger.warn(msg, extra={"task_status": self._task.status}, *args, **kwargs)
 
-    def error(self, task, msg, *args, **kwargs):
-        self._logger.error(msg, extra={"task_status": task.status}, *args, **kwargs)
+    def error(self, msg, *args, **kwargs):
+        self._logger.error(msg, extra={"task_status": self._task.status}, *args, **kwargs)
 
-    def exception(self, task, msg, *args, **kwargs):
-        self._logger.exception(msg, extra={"task_status": task.status}, *args, **kwargs)
+    def exception(self, msg, *args, **kwargs):
+        self._logger.exception(msg, extra={"task_status": self._task.status}, *args, **kwargs)
 
     @staticmethod
     def getTaskLogger(task, level=logging.INFO) -> TaskLogger:
@@ -31,5 +31,5 @@ class TaskLogger:
         task_logger.addHandler(handler)
         task_logger.setLevel(level)
         task_logger.info("what!!!")
-        task_logger = TaskLogger(task_logger)
+        task_logger = TaskLogger(task, task_logger)
         return task_logger
