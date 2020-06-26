@@ -35,6 +35,7 @@ class Task:
             task_func = config.FUNCTION
             task_pretrained = config.PRETRAINED_MODEL
             train_dataset_path = config.TRAIN_DATASET
+            train_val_split = config.SPLIT_TRAIN_VAL
             eval_dataset_path = config.EVAL_DATASET
             label_path = config.LABELSET
             train_steps = config.TRAIN_STEPS
@@ -71,7 +72,7 @@ class Task:
                     if (task_pretrained == ConfigInfo.EMBEDDED_MODEL):
                         self.status = TaskStatus.FINETUNING
                         task_logger.info("Begin to fine-tune model with tfhub. ")
-                        tfhub_model = finetuner.get_tfhub_imageclassification_model(train_dataset_path, train_epochs=train_steps)
+                        tfhub_model = finetuner.get_tfhub_imageclassification_model(train_dataset_path, split=train_val_split, train_epochs=train_steps)
                         self.status = TaskStatus.FINETUNE_DONE
                         task_logger.info("Finish fine-tuning.")
 

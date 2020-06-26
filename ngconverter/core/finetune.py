@@ -11,11 +11,11 @@ class FineTuneAPI:
     _EMBEDDED_MODEL_CHECKPOINT = "~/.nglite/pretrained"
     _EMBEDDED_OBJECTDETECTION_NAME = "ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03"
 
-    def get_tfhub_imageclassification_model(self, train_dataset, train_epochs=10, batch_size=64):
+    def get_tfhub_imageclassification_model(self, train_dataset, split=0.9, train_epochs=10, batch_size=64):
         """Runs demo."""
         #spec = model_spec.get(model_name)
         data = ImageClassifierDataLoader.from_folder(train_dataset)
-        train_data, validation_data = data.split(0.5)
+        train_data, validation_data = data.split(split)
 
         model = image_classifier.create(
             train_data,

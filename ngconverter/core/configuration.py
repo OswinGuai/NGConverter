@@ -31,8 +31,10 @@ class ConfigInfo:
             self.EVAL_DATASET = user_config['EVAL_DATASET']
         if 'LABELSET' in user_config:
             self.LABELSET = user_config['LABELSET']
-        self.TRAIN_STEPS = user_config['TRAIN_PARAMETERS']['STEPS']
-
+        if 'STEPS' in user_config['TRAIN_PARAMETERS']:
+            self.TRAIN_STEPS = user_config['TRAIN_PARAMETERS']['STEPS']
+        if 'SPLIT_TRAIN_VAL' in user_config:
+            self.SPLIT_TRAIN_VAL = float(user_config['SPLIT_TRAIN_VAL'])
 
     class JobType(Enum):
         UNDEFINED = "undefined"
