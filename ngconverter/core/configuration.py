@@ -27,8 +27,10 @@ class ConfigInfo:
 
         self.PRETRAINED_MODEL = user_config['PRETRAINED_MODEL']
         self.TRAIN_DATASET = user_config['TRAIN_DATASET']
-        self.EVAL_DATASET = user_config['EVAL_DATASET']
-        self.LABELSET = user_config['LABELSET']
+        if 'EVAL_DATASET' in user_config:
+            self.EVAL_DATASET = user_config['EVAL_DATASET']
+        if 'LABELSET' in user_config:
+            self.LABELSET = user_config['LABELSET']
         self.TRAIN_STEPS = user_config['TRAIN_PARAMETERS']['STEPS']
 
 

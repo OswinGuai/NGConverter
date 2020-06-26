@@ -19,6 +19,7 @@ pretrained_model: embedded_model
 # train_dataset candidates:
 #     (1) embedded_data.
 #     (2) an address for custom dataset. TODO Requirements should be listed.
+#train_dataset: /workspace/peizhongyi/Mobile/ty_data/classify_20200622
 train_dataset: test/resources/classification_demo_dataset
 
 # target_platform candidates:

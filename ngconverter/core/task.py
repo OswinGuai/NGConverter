@@ -53,33 +53,33 @@ class Task:
                                                                                         eval_dataset_path,
                                                                                         label_path)
                         self.status = TaskStatus.FINETUNING
-                        task_logger.info(self, "Begin to fine-tune model by config file %s." % pipeline_config_path)
+                        task_logger.info("Begin to fine-tune model by config file %s." % pipeline_config_path)
                         model_path = finetuner.finetune_embedded_objectdetection_model(pipeline_config_path, self.train_dir,
                                                                        train_steps=train_steps)
                         self.status = TaskStatus.FINETUNE_DONE
-                        task_logger.info(self, "Finish fine-tuning.")
+                        task_logger.info("Finish fine-tuning.")
 
                         self.status = TaskStatus.CONVERTING
-                        task_logger.info(self, "Begin to convert model at %s by config file %s." % (model_path, pipeline_config_path))
+                        task_logger.info("Begin to convert model at %s by config file %s." % (model_path, pipeline_config_path))
                         converter.convert_objectdetection_tf1(pipeline_config_path, model_path, self.task_dir)
                         self.status = TaskStatus.CONVERT_DONE
-                        task_logger.info(self, "Finish converting.")
+                        task_logger.info("Finish converting.")
                     else:
                         raise NotImplementedError
 
                 elif (task_func == ConfigInfo.FunctionType.IMAGE_CLASSIFICATION):
                     if (task_pretrained == ConfigInfo.EMBEDDED_MODEL):
                         self.status = TaskStatus.FINETUNING
-                        task_logger.info(self, "Begin to fine-tune model('efficientnet_lite0') with tfhub. ")
+                        task_logger.info("Begin to fine-tune model with tfhub. ")
                         tfhub_model = finetuner.get_tfhub_imageclassification_model(train_dataset_path, train_epochs=train_steps)
                         self.status = TaskStatus.FINETUNE_DONE
-                        task_logger.info(self, "Finish fine-tuning.")
+                        task_logger.info("Finish fine-tuning.")
 
                         self.status = TaskStatus.CONVERTING
-                        task_logger.info(self, "Begin to convert model('efficientnet_lite0') with tfhub.")
+                        task_logger.info("Begin to convert model with tfhub.")
                         converter.convert_imageclassification_tfhub_model(tfhub_model, self.task_dir)
                         self.status = TaskStatus.CONVERT_DONE
-                        task_logger.info(self, "Finish converting.")
+                        task_logger.info("Finish converting.")
                     else:
                         raise NotImplementedError
                 else:
@@ -96,6 +96,7 @@ class Task:
 
     def __init__(self, task_name, parent_dir='.', reloading=True, process=None):
         self.status = TaskStatus.INITING
+        self._logger = None
         self.task_dir = os.path.join(parent_dir, task_name)
         self.task_name = task_name
         # Check directory empty
@@ -116,7 +117,7 @@ class Task:
         self.resource_list = []
         self._process = process
 
-    def get_task_logger(self, level=logging.INFO):
+    def get_tasklogger(self, level=logging.INFO):
         if self._logger:
             return self._logger
         task_logger = logging.getLogger(self.task_name)
@@ -154,5 +155,3 @@ class Task:
         if self.p != None:
             self.p.join()
 
-    def get_tasklogger(self) -> TaskLogger:
-        return self._logger
