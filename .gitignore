@@ -10,3 +10,5 @@ inference_graph/
 *.out
 demo_task/
 finetune_convert_ssd_demotask/
+ty_finetune_*/
+ty_detect_*/

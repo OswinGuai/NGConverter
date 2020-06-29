@@ -27,5 +27,7 @@ bazel build -c opt tensorflow/lite/toco:toco
 ## add to path
 mv bazel-bin <PLACE_FOR_DEPENDENCIES>
 
-export PATH="<PLACE_FOR_DEPENDENCIES>/bazel-bin/tensorflow/lite/toco":$PATH
-
+# replace original toco
+which toco
+mv <PATH_TO_ORIGINAL_TOCO>/toco <PATH_TO_ORIGINAL_TOCO>/toco.ori
+ln -s <PLACE_FOR_DEPENDENCIES>/bazel-bin/tensorflow/lite/toco/toco <PATH_TO_ORIGINAL_TOCO/toco
