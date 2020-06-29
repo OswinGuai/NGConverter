@@ -18,6 +18,7 @@ class ConfigInfo:
         self.LABELSET = ConfigInfo.EMBEDDED_LABEL
         self.TARGET_PLATFORM = ConfigInfo.PlatformType.UNDEFINED
         self.TRAIN_STEPS = ConfigInfo.DEFAULT_TRAINSTEPS
+        self.SPLIT_TRAIN_VAL = 1
 
         user_config = _uppercase_for_dict_keys(yaml_config)
 
