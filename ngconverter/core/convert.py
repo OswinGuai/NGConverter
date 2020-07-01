@@ -39,8 +39,7 @@ class ConvertAPI:
                 inference_graph_path,
                 add_postprocessing_op=True,
                 max_detections=10,
-                max_classes_per_detection=10,
-                detections_per_class=10
+                max_classes_per_detection=1
                 )
 
         # 2. Convert to tflite.

@@ -14,17 +14,17 @@ def instance_tf_objectdetection_model_config(embedded_model_config_path, target_
         "num_classes": 2,
         "batch_size": 32,
         "num_steps": 2,
-        "train_dataset_path": train_dataset_path,
-        "eval_dataset_path": eval_dataset_path,
-        "label_path": label_path,
-        "fine_tune_checkpoint": "embedded_model/pretrained/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03/model.ckpt"
+        "train_dataset_path": "\"%s\"" % train_dataset_path,
+        "eval_dataset_path": "\"%s\"" % eval_dataset_path,
+        "label_path": "\"%s\"" % label_path,
+        "fine_tune_checkpoint": "\"%s\"" % "embedded_model/pretrained/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03/model.ckpt"
     }
     with open(embedded_model_config_path) as embedded_file:
         content = embedded_file.read()
-        content.format(**update_config)
+    filled_content = content.format(**update_config)
     pipeline_config_path = os.path.join(target_dir, "pipeline.config")
     if os.path.exists(pipeline_config_path):
         os.remove(pipeline_config_path)
     with open(pipeline_config_path, 'w') as filled_config:
-        filled_config.write(content)
+        filled_config.write(filled_content)
     return pipeline_config_path
