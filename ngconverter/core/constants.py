@@ -1,6 +1,6 @@
 from enum import Enum
 
-EMBEDDED_SSD_PIPELINE_CONFIG_PATH = "embedded_model/pipeline.config"
+EMBEDDED_SSD_PIPELINE_CONFIG_PATH = "embedded_model/empty_ssd_pipeline.config"
 
 class TaskStatus(Enum):
     '''
