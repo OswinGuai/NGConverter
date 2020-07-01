@@ -44,41 +44,41 @@ class ConvertAPI:
                 )
 
         # 2. Convert to tflite.
-        # options = ["--input_file=%s" % input_file_path,
-        #         "--output_file=%s" % tflite_model_path,
-        #         "--input_shapes=1,300,300,3",
-        #         "--input_arrays=normalized_input_image_tensor",
-        #         "--output_arrays=TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3",
-        #         "--output_format TFLITE",
-        #         "--inference_type=FLOAT",
-        #         "--mean_values=128",
-        #         "--std_dev_values=128",
-        #         "--change_concat_input_ranges=false",
-        #         "--allow_custom_ops"]
-        #
-        # cmd = ["toco"] + options
-        #
-        # log_file_path = os.path.join(target_dir, "convert.log")
-        # err_log_file_path = os.path.join(target_dir, "convert_err.log")
-        # log_file = open(log_file_path, "w")
-        # err_log_file = open(err_log_file_path, "w")
-        #
-        # p = subprocess.Popen(cmd, stdout=log_file, stderr=err_log_file)
-        # p.wait()
-        # log_file.close()
-        # err_log_file.close()
-        #
-        # if p.returncode != 0:
-        #     print("Error Happened! ")
-        #     print('See ERROUT from {}'.format(err_log_file_path))
-        #     return -1
-        #
-        # print("Convert finished! ")
-        # print('See STDOUT from {}'.format(log_file_path))
+        options = ["--input_file=%s" % input_file_path,
+                "--output_file=%s" % tflite_model_path,
+                "--input_shapes=1,300,300,3",
+                "--input_arrays=normalized_input_image_tensor",
+                "--output_arrays=TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3",
+                "--output_format TFLITE",
+                "--inference_type=FLOAT",
+                "--mean_values=128",
+                "--std_dev_values=128",
+                "--change_concat_input_ranges=false",
+                "--allow_custom_ops"]
 
-        input_arrays = ['normalized_input_image_tensor']
-        output_arrays = ['TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3']
-        converter = tf.compat.v1.lite.TFLiteConverter.from_frozen_graph(input_file_path, input_arrays, output_arrays, input_shapes={'normalized_input_image_tensor':[1,300,300,3]})
-        converter.allow_custom_ops = True
-        tflite_model = converter.convert()
-        open(tflite_model_path, "wb").write(tflite_model)
+        cmd = ["toco"] + options
+
+        log_file_path = os.path.join(target_dir, "convert.log")
+        err_log_file_path = os.path.join(target_dir, "convert_err.log")
+        log_file = open(log_file_path, "w")
+        err_log_file = open(err_log_file_path, "w")
+
+        p = subprocess.Popen(cmd, stdout=log_file, stderr=err_log_file)
+        p.wait()
+        log_file.close()
+        err_log_file.close()
+
+        if p.returncode != 0:
+            print("Error Happened! ")
+            print('See ERROUT from {}'.format(err_log_file_path))
+            return -1
+
+        print("Convert finished! ")
+        print('See STDOUT from {}'.format(log_file_path))
+
+        # input_arrays = ['normalized_input_image_tensor']
+        # output_arrays = ['TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3']
+        # converter = tf.compat.v1.lite.TFLiteConverter.from_frozen_graph(input_file_path, input_arrays, output_arrays, input_shapes={'normalized_input_image_tensor':[1,300,300,3]})
+        # converter.allow_custom_ops = True
+        # tflite_model = converter.convert()
+        # open(tflite_model_path, "wb").write(tflite_model)
