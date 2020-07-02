@@ -17,8 +17,9 @@ class TestTask(unittest.TestCase):
     def test_build_from_config(self):
         #self.task_name = "finetune_convert_imageclassification_demotask"
         #config_path = "test/resources/train_classification_demo_config.yaml"
-        self.task_name = "ty_detect_task_gpu_0702"
-        config_path = "test/resources/ty_detect_config.yaml"
+        #self.task_name = "task_ty_detect_0702"
+        self.task_name = "test_ty_detect_0702"
+        config_path = "test/resources/test_ty_detect_config.yaml"
         config = load_config(config_path)
         task = Task.Builder.init_by_config(self.task_name, config)
         task.execute()

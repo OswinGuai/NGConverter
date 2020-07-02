@@ -8,7 +8,6 @@ tflite_model/
 inference_graph/
 *.log
 *.out
-demo_task/
-finetune_convert_ssd_demotask/
-ty_finetune_*/
+test_*/
+task_*/
 ty_detect_*/

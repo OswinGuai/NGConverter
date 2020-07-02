@@ -43,6 +43,7 @@ class ConvertAPI:
                 )
 
         # 2. Convert to tflite.
+        '''
         options = ["--input_file=%s" % input_file_path,
                 "--output_file=%s" % tflite_model_path,
                 "--input_shapes=1,300,300,3",
@@ -74,10 +75,12 @@ class ConvertAPI:
 
         print("Convert finished! ")
         print('See STDOUT from {}'.format(log_file_path))
+        '''
 
-        # input_arrays = ['normalized_input_image_tensor']
-        # output_arrays = ['TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3']
-        # converter = tf.compat.v1.lite.TFLiteConverter.from_frozen_graph(input_file_path, input_arrays, output_arrays, input_shapes={'normalized_input_image_tensor':[1,300,300,3]})
-        # converter.allow_custom_ops = True
-        # tflite_model = converter.convert()
-        # open(tflite_model_path, "wb").write(tflite_model)
+        input_arrays = ['normalized_input_image_tensor']
+        output_arrays = ['TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3']
+        converter = tf.compat.v1.lite.TFLiteConverter.from_frozen_graph(input_file_path, input_arrays, output_arrays, input_shapes={'normalized_input_image_tensor':[1,300,300,3]})
+        converter.allow_custom_ops = True
+        tflite_model = converter.convert()
+        open(tflite_model_path, "wb").write(tflite_model)
+

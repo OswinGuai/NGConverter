@@ -12,8 +12,8 @@ def load_config(file_path):
 def instance_tf_objectdetection_model_config(embedded_model_config_path, target_dir, train_dataset_path, eval_dataset_path, label_path):
     update_config = {
         "num_classes": 2,
-        "batch_size": 32,
-        "num_steps": 2,
+        "batch_size": 128,
+        "num_steps": 20000,
         "train_dataset_path": "\"%s\"" % train_dataset_path,
         "eval_dataset_path": "\"%s\"" % eval_dataset_path,
         "label_path": "\"%s\"" % label_path,

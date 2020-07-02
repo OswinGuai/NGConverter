@@ -19,12 +19,12 @@ pretrained_model: embedded_model
 # train_dataset candidates:
 #     (1) embedded_data.
 #     (2) an address for custom dataset. TODO Requirements should be listed.
-train_dataset: /workspace/peizhongyi/Mobile/ty_data/ty_detection_20200622/train.record
+train_dataset: /workspace/peizhongyi/Mobile/ty_data/ty20200627/train.record
 
 # eval_dataset candidates:
 #     (1) embedded_data.
 #     (2) an address for custom dataset. TODO Requirements should be listed.
-eval_dataset: /workspace/peizhongyi/Mobile/ty_data/ty_detection_20200622/val.record
+eval_dataset: /workspace/peizhongyi/Mobile/ty_data/ty20200627/val.record
 
 # label set for train/eval dataset. TODO Requirements should be listed.
 labelset: test/resources/ty.pbtxt
@@ -36,4 +36,5 @@ target_platform: android
 
 # train parameters
 train_parameters:
-  steps: 100000
+  steps: 1
+
