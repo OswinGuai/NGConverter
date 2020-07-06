@@ -31,3 +31,4 @@ target_platform: android
 train_parameters:
   steps: 2
 
+gpu_available: 4,5,6,7

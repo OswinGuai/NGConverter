@@ -6,6 +6,8 @@ from embedded_model.tensorflow_examples.lite.model_maker.core.task import model_
 import tensorflow as tf
 import os
 
+import logging
+
 class FineTuneAPI:
 
     _EMBEDDED_MODEL_CHECKPOINT = "~/.nglite/pretrained"

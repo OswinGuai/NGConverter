@@ -19,6 +19,7 @@ class ConfigInfo:
         self.TARGET_PLATFORM = ConfigInfo.PlatformType.UNDEFINED
         self.TRAIN_STEPS = ConfigInfo.DEFAULT_TRAINSTEPS
         self.SPLIT_TRAIN_VAL = 1
+        self.gpu_available = None
 
         user_config = _uppercase_for_dict_keys(yaml_config)
 
@@ -28,6 +29,8 @@ class ConfigInfo:
 
         self.PRETRAINED_MODEL = user_config['PRETRAINED_MODEL']
         self.TRAIN_DATASET = user_config['TRAIN_DATASET']
+        if 'GPU_AVAILABLE' in user_config:
+            self.GPU_AVAILABLE = list(user_config['GPU_AVAILABLE'].split(','))
         if 'EVAL_DATASET' in user_config:
             self.EVAL_DATASET = user_config['EVAL_DATASET']
         if 'LABELSET' in user_config:

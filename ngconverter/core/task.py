@@ -1,13 +1,17 @@
 import os
+import sys
 import logging
 from logging import Logger
 from types import MethodType
 from multiprocessing import Process
+import tensorflow as tf
 
 from ngconverter.record.exception import REPULICATE_TASK_NAME
 from ngconverter.record.log import TaskLogger
+from ngconverter.record.redirect_stdout import direct_to_file, direct_to_console
 from ngconverter.util.filesystem import remakedirs
 from ngconverter.util.configparser import instance_tf_objectdetection_model_config
+from ngconverter.util.gpu_finder import get_best_gpu
 from ngconverter.core.configuration import ConfigInfo
 from ngconverter.core.constants import *
 from ngconverter.core.finetune import FineTuneAPI
@@ -31,6 +35,7 @@ class Task:
             task = Task(task_name, reloading=False)
             task_logger = task.get_tasklogger()
             assert isinstance(config, ConfigInfo)
+            task.gpu_available = config.GPU_AVAILABLE
             job = config.JOB
             task_func = config.FUNCTION
             task_pretrained = config.PRETRAINED_MODEL
@@ -100,6 +105,7 @@ class Task:
         self._logger = None
         self.task_dir = os.path.join(parent_dir, task_name)
         self.task_name = task_name
+        self.gpu_available = None
         # Check directory empty
         # Or, reload the task with reloading option
         if os.path.exists(self.task_dir):
@@ -132,13 +138,15 @@ class Task:
 
     def prepare_resource(self):
         # Prepare GPU for training.
+        self._logger.info("正在准备任务需要的资源...")
         for r in self.resource_list:
             assert isinstance(r, Resource)
             if r.resource_type == Resource.ResourceType.TF_GPU:
-                #TODO check memory usage currently and choose a free one.
                 assert r.required_num > 0
-                #os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, range(r.required_num)))
-                os.environ["CUDA_VISIBLE_DEVICES"] = '4'
+                gpu_index = get_best_gpu(self.gpu_available)
+                self._logger.info("准备使用GPU(%s)." % gpu_index)
+                os.environ["CUDA_VISIBLE_DEVICES"] = gpu_index
+
 
     def _process(self):
         '''
@@ -149,6 +157,8 @@ class Task:
 
     def execute(self):
         self.prepare_resource()
+        # Redirect log
+        direct_to_file(self)
         self.p = Process(target=self._process)
         self.p.start()
 

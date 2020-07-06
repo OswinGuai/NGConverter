@@ -10,6 +10,7 @@ import shutil
 
 
 class ConvertAPI:
+
     def convert_objectdetection_tf2(self, pipeline_config_path, model_path, target_dir):
         # 1. Get inference graph.
         # TODO support from TF2 is still missing.

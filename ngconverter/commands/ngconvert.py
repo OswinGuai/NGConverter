@@ -1,53 +1,51 @@
 import argparse
+import os
 import sys
+import logging
+import tensorflow as tf
 
-from absl import app
-from absl import flags
+logging.getLogger('tensorflow').disabled = True
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 from ngconverter.util.configparser import load_config
-from ngconverter.core.task import Task
-
-FLAGS = None
-
-def _parse_flags_tolerate_undef(argv):
-    """Parse args, returning any unknown flags (ABSL defaults to crashing)."""
-    return flags.FLAGS(sys.argv if argv is None else argv, known_only=True)
+from ngconverter.record.redirect_stdout import close_redirection
 
 
-def run(main=None, argv=None):
-    """Runs the program with an optional 'main' function and 'argv' list."""
-    main = main or sys.modules['__main__'].main
-    app.run(main=main, argv=argv, flags_parser=_parse_flags_tolerate_undef)
+parser = argparse.ArgumentParser(description="欢迎使用NGConverter模型转换器.")
 
-
-def main():
-    global FLAGS
-
-    parser = argparse.ArgumentParser(
-        description="欢迎使用NGConverter模型转换器.")
-    subparsers = parser.add_subparsers()
-    create_parser = subparsers.add_parser('create')
-    create_parser.add_argument(
-        "configuration",
-        type=str,
-        help="配置文件地址.")
-    create_parser.add_argument(
+subparsers = parser.add_subparsers(title='操作', help='帮助', dest='操作选项{create}', required = True)
+create_parser = subparsers.add_parser('create')
+create_parser.add_argument(
         "--name",
+        required=True,
         type=str,
         help="任务名.")
-    create_parser.add_argument(
+create_parser.add_argument(
+        "--config",
+        required=True,
+        type=str,
+        help="配置文件地址.")
+create_parser.add_argument(
         "--tensorflow",
         action="store_true",
-        help="Use tensorflow model first.")
+        default=False,
+        help="优先使用TensorFlow.")
 
-    FLAGS, unparsed = parser.parse_known_args()
+args = parser.parse_args()
 
-    run(main=create_task, argv=[sys.argv[0]] + unparsed)
+def main():
+    create_task()
 
 def create_task():
-    config = load_config(FLAGS.configuration)
-    task = Task.Builder.init_by_config(FLAGS.name, config)
+    config = load_config(args.config)
+    from ngconverter.core.task import Task
+    task = Task.Builder.init_by_config(args.name, config)
+
+    # Do task
     task.execute()
+    # close redirection
+    close_redirection()
 
 if __name__ == "__main__":
     main()
+

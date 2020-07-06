@@ -20,6 +20,7 @@ import os
 import tempfile
 import numpy as np
 import tensorflow as tf
+
 from tensorflow.core.framework import attr_value_pb2
 from tensorflow.core.framework import types_pb2
 from tensorflow.core.protobuf import saver_pb2

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import sys
 import logging
 from logging import Logger
 
@@ -30,6 +31,7 @@ class TaskLogger:
         handler.setFormatter(formatter)
         task_logger.addHandler(handler)
         task_logger.setLevel(level)
-        task_logger.info("what!!!")
         task_logger = TaskLogger(task, task_logger)
         return task_logger
+
+
