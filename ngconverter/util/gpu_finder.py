@@ -9,7 +9,7 @@ def get_free_gpu_list():
 def get_best_gpu(candidate_list):
     memory_available = get_free_gpu_list()
     if candidate_list is None:
-        return np.argmax(memory_available)
+        return str(np.argmax(memory_available))
     candidate_usages = [memory_available[int(c)] for c in candidate_list]
     return candidate_list[np.argmax(candidate_usages)]
 
