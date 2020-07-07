@@ -3,8 +3,8 @@ import unittest
 import os
 import shutil
 
-from ngconverter.core.finetune import FineTuneAPI
-from ngconverter.core.convert import ConvertAPI
+from ngconverter.core.job.finetune import FineTuneAPI
+from ngconverter.core.job.convert import ConvertAPI
 import embedded_model.object_detection.utils.config_util as config_util
 
 """

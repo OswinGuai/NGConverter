@@ -1,8 +1,6 @@
 import argparse
 import os
-import sys
 import logging
-import tensorflow as tf
 
 logging.getLogger('tensorflow').disabled = True
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
@@ -12,7 +10,6 @@ from ngconverter.record.redirect_stdout import close_redirection
 
 
 parser = argparse.ArgumentParser(description="欢迎使用NGConverter模型转换器.")
-
 subparsers = parser.add_subparsers(title='操作', help='帮助', dest='操作选项{create}', required = True)
 create_parser = subparsers.add_parser('create')
 create_parser.add_argument(
@@ -28,7 +25,6 @@ create_parser.add_argument(
 create_parser.add_argument(
         "--tensorflow",
         action="store_true",
-        default=False,
         help="优先使用TensorFlow.")
 
 args = parser.parse_args()
@@ -43,9 +39,8 @@ def create_task():
 
     # Do task
     task.execute()
-    # close redirection
+    # close redirection. Suppose there will be a redirection during the task.
     close_redirection()
 
 if __name__ == "__main__":
     main()
-

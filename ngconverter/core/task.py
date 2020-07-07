@@ -1,21 +1,18 @@
 import os
-import sys
 import logging
-from logging import Logger
 from types import MethodType
 from multiprocessing import Process
-import tensorflow as tf
 
 from ngconverter.record.exception import REPULICATE_TASK_NAME
 from ngconverter.record.log import TaskLogger
-from ngconverter.record.redirect_stdout import direct_to_file, direct_to_console
+from ngconverter.record.redirect_stdout import direct_to_file
 from ngconverter.util.filesystem import remakedirs
 from ngconverter.util.configparser import instance_tf_objectdetection_model_config
 from ngconverter.util.gpu_finder import get_best_gpu
 from ngconverter.core.configuration import ConfigInfo
 from ngconverter.core.constants import *
-from ngconverter.core.finetune import FineTuneAPI
-from ngconverter.core.convert import ConvertAPI
+from ngconverter.core.job.finetune import FineTuneAPI
+from ngconverter.core.job.convert import ConvertAPI
 from ngconverter.core.environment import Resource
 
 '''

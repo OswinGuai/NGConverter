@@ -1,12 +1,10 @@
 from embedded_model.object_detection import model_lib
 from embedded_model.tensorflow_examples.lite.model_maker.core.data_util.image_dataloader import ImageClassifierDataLoader
 from embedded_model.tensorflow_examples.lite.model_maker.core.task import image_classifier
-from embedded_model.tensorflow_examples.lite.model_maker.core.task import model_spec
 
 import tensorflow as tf
 import os
 
-import logging
 
 class FineTuneAPI:
 
@@ -15,7 +13,6 @@ class FineTuneAPI:
 
     def get_tfhub_imageclassification_model(self, train_dataset, split=0.9, train_epochs=10, batch_size=64):
         """Runs demo."""
-        #spec = model_spec.get(model_name)
         data = ImageClassifierDataLoader.from_folder(train_dataset)
         train_data, validation_data = data.split(split)
 
