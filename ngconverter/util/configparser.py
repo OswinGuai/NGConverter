@@ -1,7 +1,10 @@
 import yaml
 import os
 from ngconverter.core.configuration import ConfigInfo
+from embedded_model.object_detection.utils import label_map_util
 
+_EMBEDDED_MODEL_CHECKPOINT = "~/.nglite/pretrained"
+_EMBEDDED_OBJECTDETECTION_NAME = "ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03"
 
 def load_config(file_path):
     f = open(file_path)
@@ -9,15 +12,26 @@ def load_config(file_path):
     config_info = ConfigInfo(yaml_config)
     return config_info
 
-def instance_tf_objectdetection_model_config(embedded_model_config_path, target_dir, train_dataset_path, eval_dataset_path, label_path):
+def instance_embedded_tf_objectdetection_model_config(
+        embedded_model_config_path,
+        target_dir,
+        train_dataset_path,
+        eval_dataset_path,
+        label_path,
+        batch_size=128,
+        num_steps=10000):
+    label_dict = label_map_util.get_label_map_dict(label_path, False)
+    num_class = len(label_dict.keys())
+    pretrained_model_dir = os.path.join(_EMBEDDED_MODEL_CHECKPOINT, _EMBEDDED_OBJECTDETECTION_NAME)
+    pretrained_model = os.path.join(pretrained_model_dir, "model.ckpt")
     update_config = {
-        "num_classes": 2,
-        "batch_size": 128,
-        "num_steps": 20000,
+        "num_classes": num_class,
+        "batch_size": batch_size,
+        "num_steps": num_steps,
         "train_dataset_path": "\"%s\"" % train_dataset_path,
         "eval_dataset_path": "\"%s\"" % eval_dataset_path,
         "label_path": "\"%s\"" % label_path,
-        "fine_tune_checkpoint": "\"%s\"" % "embedded_model/pretrained/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03/model.ckpt"
+        "fine_tune_checkpoint": "\"%s\"" % pretrained_model
     }
     with open(embedded_model_config_path) as embedded_file:
         content = embedded_file.read()

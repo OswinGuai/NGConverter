@@ -7,7 +7,7 @@ from ngconverter.record.exception import REPULICATE_TASK_NAME
 from ngconverter.record.log import TaskLogger
 from ngconverter.record.redirect_stdout import direct_to_file
 from ngconverter.util.filesystem import remakedirs
-from ngconverter.util.configparser import instance_tf_objectdetection_model_config
+from ngconverter.util.configparser import instance_embedded_tf_objectdetection_model_config
 from ngconverter.util.gpu_finder import get_best_gpu
 from ngconverter.core.configuration import ConfigInfo
 from ngconverter.core.constants import *
@@ -50,15 +50,17 @@ class Task:
                 task_logger = self.get_tasklogger()
                 if (task_func == ConfigInfo.FunctionType.OBJECT_DETECTION):
                     if (task_pretrained == ConfigInfo.EMBEDDED_MODEL):
-                        pipeline_config_path = instance_tf_objectdetection_model_config(EMBEDDED_SSD_PIPELINE_CONFIG_PATH,
+                        pipeline_config_path = instance_embedded_tf_objectdetection_model_config(EMBEDDED_SSD_PIPELINE_CONFIG_PATH,
                                                                                         self.task_dir,
                                                                                         train_dataset_path,
                                                                                         eval_dataset_path,
                                                                                         label_path)
                         self.status = TaskStatus.FINETUNING
                         task_logger.info("Begin to fine-tune model by config file %s." % pipeline_config_path)
-                        model_path = finetuner.finetune_embedded_objectdetection_model(pipeline_config_path, self.train_dir,
-                                                                       train_steps=train_steps)
+                        model_path = finetuner.finetune_embedded_objectdetection_model(
+                            pipeline_config_path,
+                            self.train_dir,
+                            train_steps=train_steps)
                         self.status = TaskStatus.FINETUNE_DONE
                         task_logger.info("Finish fine-tuning.")
 
