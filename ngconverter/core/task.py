@@ -5,7 +5,7 @@ from multiprocessing import Process
 
 from ngconverter.record.exception import REPULICATE_TASK_NAME
 from ngconverter.record.log import TaskLogger
-from ngconverter.record.redirect_stdout import direct_to_file
+from ngconverter.record.redirect_stdout import direct_to_file, direct_to_console
 from ngconverter.util.filesystem import remakedirs
 from ngconverter.util.configparser import instance_embedded_tf_objectdetection_model_config
 from ngconverter.util.gpu_finder import get_best_gpu
@@ -157,7 +157,7 @@ class Task:
     def execute(self):
         self.prepare_resource()
         # Redirect log
-        direct_to_file(self)
+        # direct_to_file(self)
         self.p = Process(target=self._process)
         self.p.start()
 

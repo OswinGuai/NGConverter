@@ -6,7 +6,7 @@ logging.getLogger('tensorflow').disabled = True
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 from ngconverter.util.configparser import load_config
-from ngconverter.record.redirect_stdout import close_redirection
+from ngconverter.record.redirect_stdout import close_redirection, direct_to_file, direct_to_console
 
 
 parser = argparse.ArgumentParser(description="欢迎使用NGConverter模型转换器.")
@@ -37,6 +37,7 @@ def create_task():
     from ngconverter.core.task import Task
     task = Task.Builder.init_by_config(args.name, config)
 
+    direct_to_console()
     # Do task
     task.execute()
     # close redirection. Suppose there will be a redirection during the task.
