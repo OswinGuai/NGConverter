@@ -1,6 +1,8 @@
 from enum import Enum
+from pathlib import Path
+home = str(Path.home())
 
-EMBEDDED_SSD_PIPELINE_CONFIG_PATH = "embedded_model/empty_ssd_pipeline.config"
+EMBEDDED_SSD_PIPELINE_CONFIG_PATH = "%s/.nglite/empty_ssd_pipeline.config" % home
 
 class TaskStatus(Enum):
     '''

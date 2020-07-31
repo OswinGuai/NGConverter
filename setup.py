@@ -1,4 +1,7 @@
 from setuptools import setup, find_packages
+import shutil, os
+from ngconverter.core.task import EMBEDDED_SSD_PIPELINE_CONFIG_PATH
+from ngconverter.util.filesystem import try_makedirs
 
 #files = ["embedded_model/*", "ngconverter/*"]
 #files = ["things/*"]
@@ -14,3 +17,6 @@ setup(
         ]
     }
 )
+
+try_makedirs(os.path.dirname(EMBEDDED_SSD_PIPELINE_CONFIG_PATH))
+shutil.copy("embedded_model/empty_ssd_pipeline.config",EMBEDDED_SSD_PIPELINE_CONFIG_PATH)
