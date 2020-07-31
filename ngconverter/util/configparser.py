@@ -1,5 +1,6 @@
 import yaml
 import os
+from pathlib import Path
 from ngconverter.core.configuration import ConfigInfo
 from embedded_model.object_detection.utils import label_map_util
 from urllib import request
@@ -31,7 +32,8 @@ def instance_embedded_tf_objectdetection_model_config(
     try_makedirs(_EMBEDDED_MODEL_CHECKPOINT)
     if not os.path.exists(pretrained_model_dir):# Download and extract the model from the internet.
         sys.stdout.write("Pretrained model has not been deployed. Do it now...\n")
-        local_pack = os.path.join("~/.nglite", _EMBEDDED_OBJECTDETECTION_NAME + ".tar.gz")
+        home = str(Path.home())
+        local_pack = os.path.join("%s/.nglite" % home, _EMBEDDED_OBJECTDETECTION_NAME + ".tar.gz")
         sys.stdout.write("Download pretrained model from %s to %s...\n" % (_EMBEDDED_OBJECTDETECTION_URL, local_pack))
         sys.stdout.flush()
         request.urlretrieve(_EMBEDDED_OBJECTDETECTION_URL, local_pack)
