@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 import shutil, os
-from ngconverter.core.task import EMBEDDED_SSD_PIPELINE_CONFIG_PATH
+from ngconverter.core.constants import EMBEDDED_SSD_PIPELINE_CONFIG_PATH
 from ngconverter.util.filesystem import try_makedirs
 
 #files = ["embedded_model/*", "ngconverter/*"]
