@@ -119,7 +119,8 @@ def main(_):
     assert(FLAGS.output_path != '/')
     assert(FLAGS.output_path != '.')
     assert(FLAGS.output_path != '..')
-    shutil.rmtree(FLAGS.output_path)
+    if os.path.exists(FLAGS.output_path):
+        shutil.rmtree(FLAGS.output_path)
     train_image_path, train_label_path, val_image_path, val_label_path = copy_to_train(FLAGS.input_image_path, FLAGS.input_label_path, FLAGS.output_path)
 
     train_writer = tf.python_io.TFRecordWriter(os.path.join(FLAGS.output_path, "train.record"))
