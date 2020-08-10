@@ -41,7 +41,7 @@ class RedirectStdout:
   
 # Redirect Object
 redirObj = RedirectStdout()
-sys.stdout = redirObj
+# sys.stdout = redirObj
 
 def direct_to_file(task):
     # Redirect log
