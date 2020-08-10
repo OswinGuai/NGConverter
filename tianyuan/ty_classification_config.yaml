@@ -21,7 +21,7 @@ pretrained_model: embedded_model
 #     (2) an address for custom dataset. TODO Requirements should be listed.
 train_dataset: /workspace/peizhongyi/Mobile/ty_data/classify_20200622
 
-split_train_val: 0.9
+split_train_val: 0.8
 # target_platform candidates:
 #     (1) android.
 #     (2) ios.
@@ -29,5 +29,5 @@ target_platform: android
 
 # train parameters
 train_parameters:
-  steps: 1000
+  steps: 100
 
