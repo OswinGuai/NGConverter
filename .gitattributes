@@ -1,3 +1,2 @@
 test/resources/train.record filter=lfs diff=lfs merge=lfs -text
 test/resources/val.record filter=lfs diff=lfs merge=lfs -text
-test/resources/ty.pbtxt filter=lfs diff=lfs merge=lfs -text
