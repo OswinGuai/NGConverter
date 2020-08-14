@@ -148,7 +148,7 @@ def main(_):
     # TODO(user): Write code to read in your dataset to examples variable
 
     label_tree = {
-        'bucket0': ['bucket0','bucket01','bucket03'],
+        'bucket0': ['bucket0','bucket01','bucket03','bucket09'],
         'bucket1': ['bucket1', 'bucket19'],
         'Truck': ['Truck'],
     }
