@@ -8,8 +8,8 @@ import shutil
 import sys
 from ngconverter.util.filesystem import try_makedirs
 
-
-_EMBEDDED_MODEL_CHECKPOINT = "~/.nglite/pretrained"
+home = str(Path.home())
+_EMBEDDED_MODEL_CHECKPOINT = "%s/.nglite/pretrained" % home
 _EMBEDDED_OBJECTDETECTION_NAME = "ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03"
 _EMBEDDED_OBJECTDETECTION_URL = "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03.tar.gz"
 def load_config(file_path):
@@ -32,7 +32,6 @@ def instance_embedded_tf_objectdetection_model_config(
     try_makedirs(_EMBEDDED_MODEL_CHECKPOINT)
     if not os.path.exists(pretrained_model_dir):# Download and extract the model from the internet.
         sys.stdout.write("Pretrained model has not been deployed. Do it now...\n")
-        home = str(Path.home())
         local_pack = os.path.join("%s/.nglite" % home, _EMBEDDED_OBJECTDETECTION_NAME + ".tar.gz")
         sys.stdout.write("Download pretrained model from %s to %s...\n" % (_EMBEDDED_OBJECTDETECTION_URL, local_pack))
         sys.stdout.flush()

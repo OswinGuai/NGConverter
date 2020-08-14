@@ -1,0 +1,15 @@
+item {
+  id: 1
+  name: 'bucket0'
+}
+
+item {
+  id: 2
+  name: 'bucket1'
+}
+
+item {
+  id: 3
+  name: 'Truck'
+}
+
