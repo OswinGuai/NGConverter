@@ -33,7 +33,7 @@ tensorflow==1.15.2
 tensorflow-addons==0.10.0
 tensorflow-core==0.0.0.post2
 tensorflow-estimator==1.15.1
-tensorflow-gpu==1.15.3
+tensorflow-gpu==1.15.4
 tensorflow-hub==0.8.0
 tensorflow-metadata==0.21.1
 tf-slim==1.1.0
