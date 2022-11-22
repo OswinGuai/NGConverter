@@ -16,7 +16,7 @@ matplotlib==3.2.2
 #mkl-service==2.3.0
 numpy==1.17.1
 opt-einsum==3.1.0
-Pillow==7.1.2
+Pillow==9.3.0
 promise==2.3
 protobuf==3.12.4
 pybind11==2.5.0
